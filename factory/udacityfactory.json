@@ -1,0 +1,17 @@
+{
+	"name": "udacityfactory",
+	"properties": {
+		"globalParameters": {
+			"p_FiscalYear": {
+				"type": "int",
+				"value": 2021
+			}
+		}
+	},
+	"location": "southeastasia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "a2046182-c397-4fbc-815d-b3f96b42cdf8",
+		"tenantId": "9b7cbd77-6d6b-4879-8aba-63d7dfb18472"
+	}
+}

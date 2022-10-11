@@ -1,0 +1,12 @@
+{
+	"name": "AzureDataLakeStorageGen2",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://udacityaccountgen2.dfs.core.windows.net/",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFGQUNUT1JZQDI2RkRDOEExLTE1OTgtNDc2QS04RjQ4LTg4QjA4NjRCRUY0N19jZDMyMzM3NS0xYTQ4LTQwZGUtYjQ5Mi1lNzUxNTRjMTA2ZmIiDQp9"
+		}
+	}
+}
