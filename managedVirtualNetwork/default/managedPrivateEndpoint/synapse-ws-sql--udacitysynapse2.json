@@ -1,0 +1,10 @@
+{
+	"name": "synapse-ws-sql--udacitysynapse2",
+	"properties": {
+		"privateLinkResourceId": "/subscriptions/94ec3a64-dcfe-4219-9e29-88221690c382/resourceGroups/Regroup_2oBqeiIX/providers/Microsoft.Synapse/workspaces/udacitysynapse2",
+		"groupId": "sql",
+		"fqdns": [
+			"udacitysynapse2.ee5b23bc-eb3f-41c9-835c-3ef76900a1a5.sql.azuresynapse.net"
+		]
+	}
+}

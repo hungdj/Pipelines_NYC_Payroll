@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 5",
+	"properties": {
+		"content": {
+			"query": "SELECT TOP (100) [FiscalYear]\n,[AgencyName]\n,[TotalPaid]\n FROM [dbo].[NYC_Payroll_Summary]",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "udacitydecicatedpool",
+				"poolName": "udacitydecicatedpool"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

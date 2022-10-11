@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 2",
+	"properties": {
+		"content": {
+			"query": "SELECT TOP (100) [EmployeeID]\n,[LastName]\n,[FirstName]\n FROM [dbo].[NYC_Payroll_EMP_MD]",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "udacitydecicatedpool",
+				"poolName": "udacitydecicatedpool"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
