@@ -1,0 +1,840 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "udacityfactory"
+		},
+		"AzureDataLakeStorageGen2_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorageGen2'"
+		},
+		"AzureSqlDatabase1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase1'"
+		},
+		"AzureSynapseAnalytics1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSynapseAnalytics1'"
+		},
+		"AzureDataLakeStorageGen2_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://udacityaccountgen2.dfs.core.windows.net/"
+		},
+		"synapse-ws-custstgacct--udacitysynapse2-udacityaccountgen2_properties_privateLinkResourceId": {
+			"type": "string",
+			"defaultValue": "/subscriptions/94ec3a64-dcfe-4219-9e29-88221690c382/resourceGroups/Regroup_2oBqeiIX/providers/Microsoft.Storage/storageAccounts/udacityaccountgen2"
+		},
+		"synapse-ws-custstgacct--udacitysynapse2-udacityaccountgen2_properties_groupId": {
+			"type": "string",
+			"defaultValue": "dfs"
+		},
+		"synapse-ws-sql--udacitysynapse2_properties_privateLinkResourceId": {
+			"type": "string",
+			"defaultValue": "/subscriptions/94ec3a64-dcfe-4219-9e29-88221690c382/resourceGroups/Regroup_2oBqeiIX/providers/Microsoft.Synapse/workspaces/udacitysynapse2"
+		},
+		"synapse-ws-sql--udacitysynapse2_properties_groupId": {
+			"type": "string",
+			"defaultValue": "sql"
+		},
+		"synapse-ws-sql--udacitysynapse2_properties_fqdns": {
+			"type": "array",
+			"defaultValue": [
+				"udacitysynapse2.ee5b23bc-eb3f-41c9-835c-3ef76900a1a5.sql.azuresynapse.net"
+			]
+		},
+		"synapse-ws-sqlOnDemand--udacitysynapse2_properties_privateLinkResourceId": {
+			"type": "string",
+			"defaultValue": "/subscriptions/94ec3a64-dcfe-4219-9e29-88221690c382/resourceGroups/Regroup_2oBqeiIX/providers/Microsoft.Synapse/workspaces/udacitysynapse2"
+		},
+		"synapse-ws-sqlOnDemand--udacitysynapse2_properties_groupId": {
+			"type": "string",
+			"defaultValue": "sqlOnDemand"
+		},
+		"synapse-ws-sqlOnDemand--udacitysynapse2_properties_fqdns": {
+			"type": "array",
+			"defaultValue": [
+				"udacitysynapse2-ondemand.ee5b23bc-eb3f-41c9-835c-3ef76900a1a5.sql.azuresynapse.net"
+			]
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureDataLakeStorageGen2')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('AzureDataLakeStorageGen2_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('AzureDataLakeStorageGen2_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlDatabase1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureSqlDatabase1_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSynapseAnalytics1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDW",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureSynapseAnalytics1_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/WorkspaceSystemIdentity')]",
+			"type": "Microsoft.DataFactory/factories/credentials",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "ManagedIdentity",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/default')]",
+			"type": "Microsoft.DataFactory/factories/managedVirtualNetworks",
+			"apiVersion": "2018-06-01",
+			"properties": {},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlTable_NYC_Payroll_Data')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "FiscalYear",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "PayrollNumber",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "AgencyID",
+						"type": "varchar"
+					},
+					{
+						"name": "AgencyName",
+						"type": "varchar"
+					},
+					{
+						"name": "EmployeeID",
+						"type": "varchar"
+					},
+					{
+						"name": "LastName",
+						"type": "varchar"
+					},
+					{
+						"name": "FirstName",
+						"type": "varchar"
+					},
+					{
+						"name": "AgencyStartDate",
+						"type": "date"
+					},
+					{
+						"name": "WorkLocationBorough",
+						"type": "varchar"
+					},
+					{
+						"name": "TitleCode",
+						"type": "varchar"
+					},
+					{
+						"name": "TitleDescription",
+						"type": "varchar"
+					},
+					{
+						"name": "LeaveStatusasofJune30",
+						"type": "varchar"
+					},
+					{
+						"name": "BaseSalary",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "PayBasis",
+						"type": "varchar"
+					},
+					{
+						"name": "RegularHours",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "RegularGrossPaid",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "OTHours",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "TotalOTPaid",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "TotalOtherPay",
+						"type": "float",
+						"precision": 15
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "NYC_Payroll_Data"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_AgencyMaster')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorageGen2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "AgencyMaster.csv",
+						"folderPath": "dirpayrollfiles",
+						"fileSystem": "adlsnycpayroll-hungdx5-lastintial"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorageGen2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_EmpMaster')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorageGen2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "EmpMaster.csv",
+						"folderPath": "dirpayrollfiles",
+						"fileSystem": "adlsnycpayroll-hungdx5-lastintial"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "EmployeeID",
+						"type": "String"
+					},
+					{
+						"name": "LastName",
+						"type": "String"
+					},
+					{
+						"name": "FirstName",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorageGen2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_TitleMaster')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorageGen2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "TitleMaster.csv",
+						"folderPath": "dirpayrollfiles",
+						"fileSystem": "adlsnycpayroll-hungdx5-lastintial"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorageGen2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_historical_files')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorageGen2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "nycpayroll_2020.csv",
+						"folderPath": "dirhistoryfiles",
+						"fileSystem": "adlsnycpayroll-hungdx5-lastintial"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "FiscalYear",
+						"type": "String"
+					},
+					{
+						"name": "PayrollNumber",
+						"type": "String"
+					},
+					{
+						"name": "AgencyID",
+						"type": "String"
+					},
+					{
+						"name": "AgencyName",
+						"type": "String"
+					},
+					{
+						"name": "EmployeeID",
+						"type": "String"
+					},
+					{
+						"name": "LastName",
+						"type": "String"
+					},
+					{
+						"name": "FirstName",
+						"type": "String"
+					},
+					{
+						"name": "AgencyStartDate",
+						"type": "String"
+					},
+					{
+						"name": "WorkLocationBorough",
+						"type": "String"
+					},
+					{
+						"name": "TitleCode",
+						"type": "String"
+					},
+					{
+						"name": "TitleDescription",
+						"type": "String"
+					},
+					{
+						"name": "LeaveStatusasofJune30",
+						"type": "String"
+					},
+					{
+						"name": "BaseSalary",
+						"type": "String"
+					},
+					{
+						"name": "PayBasis",
+						"type": "String"
+					},
+					{
+						"name": "RegularHours",
+						"type": "String"
+					},
+					{
+						"name": "RegularGrossPaid",
+						"type": "String"
+					},
+					{
+						"name": "OTHours",
+						"type": "String"
+					},
+					{
+						"name": "TotalOTPaid",
+						"type": "String"
+					},
+					{
+						"name": "TotalOtherPay",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorageGen2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_nycpayroll_2021')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorageGen2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "nycpayroll_2021.csv",
+						"folderPath": "dirpayrollfiles",
+						"fileSystem": "adlsnycpayroll-hungdx5-lastintial"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorageGen2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_syn_NYC_Payroll_AGENCY_MD')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSynapseAnalytics1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [
+					{
+						"name": "AgencyID",
+						"type": "varchar"
+					},
+					{
+						"name": "AgencyName",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "NYC_Payroll_AGENCY_MD"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSynapseAnalytics1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_syn_NYC_Payroll_Data')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSynapseAnalytics1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [
+					{
+						"name": "FiscalYear",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "PayrollNumber",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "AgencyID",
+						"type": "varchar"
+					},
+					{
+						"name": "AgencyName",
+						"type": "varchar"
+					},
+					{
+						"name": "EmployeeID",
+						"type": "varchar"
+					},
+					{
+						"name": "LastName",
+						"type": "varchar"
+					},
+					{
+						"name": "FirstName",
+						"type": "varchar"
+					},
+					{
+						"name": "AgencyStartDate",
+						"type": "date"
+					},
+					{
+						"name": "WorkLocationBorough",
+						"type": "varchar"
+					},
+					{
+						"name": "TitleCode",
+						"type": "varchar"
+					},
+					{
+						"name": "TitleDescription",
+						"type": "varchar"
+					},
+					{
+						"name": "LeaveStatusasofJune30",
+						"type": "varchar"
+					},
+					{
+						"name": "BaseSalary",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "PayBasis",
+						"type": "varchar"
+					},
+					{
+						"name": "RegularHours",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "RegularGrossPaid",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "OTHours",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "TotalOTPaid",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "TotalOtherPay",
+						"type": "float",
+						"precision": 15
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "NYC_Payroll_Data"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSynapseAnalytics1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_syn_NYC_Payroll_EMP_MD')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSynapseAnalytics1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [
+					{
+						"name": "EmployeeID",
+						"type": "varchar"
+					},
+					{
+						"name": "LastName",
+						"type": "varchar"
+					},
+					{
+						"name": "FirstName",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "NYC_Payroll_EMP_MD"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSynapseAnalytics1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_syn_NYC_Payroll_TITLE_MD')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSynapseAnalytics1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [
+					{
+						"name": "TitleCode",
+						"type": "varchar"
+					},
+					{
+						"name": "TitleDescription",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "NYC_Payroll_TITLE_MD"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSynapseAnalytics1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_table_synapse_nycpayroll_summary')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSynapseAnalytics1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [
+					{
+						"name": "FiscalYear",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "AgencyName",
+						"type": "varchar"
+					},
+					{
+						"name": "TotalPaid",
+						"type": "float",
+						"precision": 15
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "NYC_Payroll_Summary"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSynapseAnalytics1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AutoResolveIntegrationRuntime')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "Managed",
+				"typeProperties": {
+					"computeProperties": {
+						"location": "AutoResolve",
+						"dataFlowProperties": {
+							"computeType": "General",
+							"coreCount": 8,
+							"timeToLive": 0
+						}
+					}
+				},
+				"managedVirtualNetwork": {
+					"type": "ManagedVirtualNetworkReference",
+					"referenceName": "default"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/managedVirtualNetworks/default')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/default/synapse-ws-custstgacct--udacitysynapse2-udacityaccountgen2')]",
+			"type": "Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"privateLinkResourceId": "[parameters('synapse-ws-custstgacct--udacitysynapse2-udacityaccountgen2_properties_privateLinkResourceId')]",
+				"groupId": "[parameters('synapse-ws-custstgacct--udacitysynapse2-udacityaccountgen2_properties_groupId')]"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/managedVirtualNetworks/default')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/default/synapse-ws-sql--udacitysynapse2')]",
+			"type": "Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"privateLinkResourceId": "[parameters('synapse-ws-sql--udacitysynapse2_properties_privateLinkResourceId')]",
+				"groupId": "[parameters('synapse-ws-sql--udacitysynapse2_properties_groupId')]",
+				"fqdns": "[parameters('synapse-ws-sql--udacitysynapse2_properties_fqdns')]"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/managedVirtualNetworks/default')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/default/synapse-ws-sqlOnDemand--udacitysynapse2')]",
+			"type": "Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"privateLinkResourceId": "[parameters('synapse-ws-sqlOnDemand--udacitysynapse2_properties_privateLinkResourceId')]",
+				"groupId": "[parameters('synapse-ws-sqlOnDemand--udacitysynapse2_properties_groupId')]",
+				"fqdns": "[parameters('synapse-ws-sqlOnDemand--udacitysynapse2_properties_fqdns')]"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/managedVirtualNetworks/default')]"
+			]
+		}
+	]
+}

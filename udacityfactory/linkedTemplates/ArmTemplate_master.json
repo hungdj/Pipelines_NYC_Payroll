@@ -1,0 +1,164 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "udacityfactory"
+		},
+		"AzureDataLakeStorageGen2_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorageGen2'"
+		},
+		"AzureSqlDatabase1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase1'"
+		},
+		"AzureSynapseAnalytics1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSynapseAnalytics1'"
+		},
+		"udacitysynapse2-WorkspaceDefaultSqlServer_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'udacitysynapse2-WorkspaceDefaultSqlServer'"
+		},
+		"AzureDataLakeStorageGen2_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://udacityaccountgen2.dfs.core.windows.net/"
+		},
+		"udacitysynapse2-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://udacityaccountgen2.dfs.core.windows.net"
+		},
+		"synapse-ws-custstgacct--udacitysynapse2-udacityaccountgen2_properties_privateLinkResourceId": {
+			"type": "string",
+			"defaultValue": "/subscriptions/94ec3a64-dcfe-4219-9e29-88221690c382/resourceGroups/Regroup_2oBqeiIX/providers/Microsoft.Storage/storageAccounts/udacityaccountgen2"
+		},
+		"synapse-ws-custstgacct--udacitysynapse2-udacityaccountgen2_properties_groupId": {
+			"type": "string",
+			"defaultValue": "dfs"
+		},
+		"synapse-ws-sql--udacitysynapse2_properties_privateLinkResourceId": {
+			"type": "string",
+			"defaultValue": "/subscriptions/94ec3a64-dcfe-4219-9e29-88221690c382/resourceGroups/Regroup_2oBqeiIX/providers/Microsoft.Synapse/workspaces/udacitysynapse2"
+		},
+		"synapse-ws-sql--udacitysynapse2_properties_groupId": {
+			"type": "string",
+			"defaultValue": "sql"
+		},
+		"synapse-ws-sql--udacitysynapse2_properties_fqdns": {
+			"type": "array",
+			"defaultValue": [
+				"udacitysynapse2.ee5b23bc-eb3f-41c9-835c-3ef76900a1a5.sql.azuresynapse.net"
+			]
+		},
+		"synapse-ws-sqlOnDemand--udacitysynapse2_properties_privateLinkResourceId": {
+			"type": "string",
+			"defaultValue": "/subscriptions/94ec3a64-dcfe-4219-9e29-88221690c382/resourceGroups/Regroup_2oBqeiIX/providers/Microsoft.Synapse/workspaces/udacitysynapse2"
+		},
+		"synapse-ws-sqlOnDemand--udacitysynapse2_properties_groupId": {
+			"type": "string",
+			"defaultValue": "sqlOnDemand"
+		},
+		"synapse-ws-sqlOnDemand--udacitysynapse2_properties_fqdns": {
+			"type": "array",
+			"defaultValue": [
+				"udacitysynapse2-ondemand.ee5b23bc-eb3f-41c9-835c-3ef76900a1a5.sql.azuresynapse.net"
+			]
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "udacityfactory_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"AzureDataLakeStorageGen2_accountKey": {
+						"value": "[parameters('AzureDataLakeStorageGen2_accountKey')]"
+					},
+					"AzureSqlDatabase1_connectionString": {
+						"value": "[parameters('AzureSqlDatabase1_connectionString')]"
+					},
+					"AzureSynapseAnalytics1_connectionString": {
+						"value": "[parameters('AzureSynapseAnalytics1_connectionString')]"
+					},
+					"AzureDataLakeStorageGen2_properties_typeProperties_url": {
+						"value": "[parameters('AzureDataLakeStorageGen2_properties_typeProperties_url')]"
+					},
+					"synapse-ws-custstgacct--udacitysynapse2-udacityaccountgen2_properties_privateLinkResourceId": {
+						"value": "[parameters('synapse-ws-custstgacct--udacitysynapse2-udacityaccountgen2_properties_privateLinkResourceId')]"
+					},
+					"synapse-ws-custstgacct--udacitysynapse2-udacityaccountgen2_properties_groupId": {
+						"value": "[parameters('synapse-ws-custstgacct--udacitysynapse2-udacityaccountgen2_properties_groupId')]"
+					},
+					"synapse-ws-sql--udacitysynapse2_properties_privateLinkResourceId": {
+						"value": "[parameters('synapse-ws-sql--udacitysynapse2_properties_privateLinkResourceId')]"
+					},
+					"synapse-ws-sql--udacitysynapse2_properties_groupId": {
+						"value": "[parameters('synapse-ws-sql--udacitysynapse2_properties_groupId')]"
+					},
+					"synapse-ws-sql--udacitysynapse2_properties_fqdns": {
+						"value": "[parameters('synapse-ws-sql--udacitysynapse2_properties_fqdns')]"
+					},
+					"synapse-ws-sqlOnDemand--udacitysynapse2_properties_privateLinkResourceId": {
+						"value": "[parameters('synapse-ws-sqlOnDemand--udacitysynapse2_properties_privateLinkResourceId')]"
+					},
+					"synapse-ws-sqlOnDemand--udacitysynapse2_properties_groupId": {
+						"value": "[parameters('synapse-ws-sqlOnDemand--udacitysynapse2_properties_groupId')]"
+					},
+					"synapse-ws-sqlOnDemand--udacitysynapse2_properties_fqdns": {
+						"value": "[parameters('synapse-ws-sqlOnDemand--udacitysynapse2_properties_fqdns')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "udacityfactory_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"udacitysynapse2-WorkspaceDefaultSqlServer_connectionString": {
+						"value": "[parameters('udacitysynapse2-WorkspaceDefaultSqlServer_connectionString')]"
+					},
+					"udacitysynapse2-WorkspaceDefaultStorage_properties_typeProperties_url": {
+						"value": "[parameters('udacitysynapse2-WorkspaceDefaultStorage_properties_typeProperties_url')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'udacityfactory_ArmTemplate_0')]"
+			]
+		}
+	]
+}

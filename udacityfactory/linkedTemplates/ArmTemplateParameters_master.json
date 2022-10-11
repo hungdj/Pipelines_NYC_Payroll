@@ -1,0 +1,61 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "udacityfactory"
+		},
+		"AzureDataLakeStorageGen2_accountKey": {
+			"value": ""
+		},
+		"AzureSqlDatabase1_connectionString": {
+			"value": ""
+		},
+		"AzureSynapseAnalytics1_connectionString": {
+			"value": ""
+		},
+		"udacitysynapse2-WorkspaceDefaultSqlServer_connectionString": {
+			"value": ""
+		},
+		"AzureDataLakeStorageGen2_properties_typeProperties_url": {
+			"value": "https://udacityaccountgen2.dfs.core.windows.net/"
+		},
+		"udacitysynapse2-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"value": "https://udacityaccountgen2.dfs.core.windows.net"
+		},
+		"synapse-ws-custstgacct--udacitysynapse2-udacityaccountgen2_properties_privateLinkResourceId": {
+			"value": "/subscriptions/94ec3a64-dcfe-4219-9e29-88221690c382/resourceGroups/Regroup_2oBqeiIX/providers/Microsoft.Storage/storageAccounts/udacityaccountgen2"
+		},
+		"synapse-ws-custstgacct--udacitysynapse2-udacityaccountgen2_properties_groupId": {
+			"value": "dfs"
+		},
+		"synapse-ws-sql--udacitysynapse2_properties_privateLinkResourceId": {
+			"value": "/subscriptions/94ec3a64-dcfe-4219-9e29-88221690c382/resourceGroups/Regroup_2oBqeiIX/providers/Microsoft.Synapse/workspaces/udacitysynapse2"
+		},
+		"synapse-ws-sql--udacitysynapse2_properties_groupId": {
+			"value": "sql"
+		},
+		"synapse-ws-sql--udacitysynapse2_properties_fqdns": {
+			"value": [
+				"udacitysynapse2.ee5b23bc-eb3f-41c9-835c-3ef76900a1a5.sql.azuresynapse.net"
+			]
+		},
+		"synapse-ws-sqlOnDemand--udacitysynapse2_properties_privateLinkResourceId": {
+			"value": "/subscriptions/94ec3a64-dcfe-4219-9e29-88221690c382/resourceGroups/Regroup_2oBqeiIX/providers/Microsoft.Synapse/workspaces/udacitysynapse2"
+		},
+		"synapse-ws-sqlOnDemand--udacitysynapse2_properties_groupId": {
+			"value": "sqlOnDemand"
+		},
+		"synapse-ws-sqlOnDemand--udacitysynapse2_properties_fqdns": {
+			"value": [
+				"udacitysynapse2-ondemand.ee5b23bc-eb3f-41c9-835c-3ef76900a1a5.sql.azuresynapse.net"
+			]
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}
